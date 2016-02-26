@@ -53,8 +53,8 @@ MV = mv
 #
 # Define the version strings
 #
-PRODUCTVERSION = 0_4_15
-PRODUCTVERSION_DOT = 0.4.15
+PRODUCTVERSION = 0_4_16
+PRODUCTVERSION_DOT = 0.4.16
 PRODUCTNAME = Epp
 #
 # Define the jar file names
@@ -79,7 +79,8 @@ PACKAGES = \
 	com.neulevel.epp.xri.command \
 	com.neulevel.epp.xri.response \
 	com.neulevel.biz \
-	com.neulevel.us
+	com.neulevel.us \
+	com.neulevel.cn
 
 #	com.neulevel.epp.transport.beep \
 #	com.neulevel.epp.client \

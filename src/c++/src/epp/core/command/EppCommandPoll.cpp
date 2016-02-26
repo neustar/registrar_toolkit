@@ -58,7 +58,6 @@ EppCommandPoll::EppCommandPoll( DOMString operation, DOMString messageId, DOMStr
 DOMElement* EppCommandPoll::toXML( DOMDocument& doc, const DOMString& tag )
 {
 	DOMAttr* attr;
-	DOMElement* elm = NULL;
 	ValueVectorOf<DOMAttr*> attrList(3);
 
 	if( op.isNotNull() )
@@ -74,7 +73,7 @@ DOMElement* EppCommandPoll::toXML( DOMDocument& doc, const DOMString& tag )
 		attrList.addElement(attr);
 	}
 
-	return toXMLCommon(doc, tag, *elm, &attrList);
+	return toXMLCommon(doc, tag, (DOMElement*) null, &attrList);
 }
 
 EppCommandPoll * EppCommandPoll::fromXML( const DOMNode& root )

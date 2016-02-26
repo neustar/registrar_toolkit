@@ -45,6 +45,7 @@ SRCS=\
 	EppTestIDN.cpp 		\
 	EppTestFee.cpp 		\
 	EppTestChangePoll.cpp 		\
+	EppTestCN.cpp 		\
 
 OBJS=\
 	EppTestCore.$(O)	\
@@ -56,6 +57,7 @@ OBJS=\
 	EppTestIDN.$(O) 	\
 	EppTestFee.$(O) 	\
 	EppTestChangePoll.$(O) 	\
+	EppTestCN.$(O) 	\
 
 BINS=\
 	EppTestCore$(EXE)	\
@@ -67,6 +69,7 @@ BINS=\
 	EppTestIDN$(EXE) \
 	EppTestFee$(EXE) \
 	EppTestChangePoll$(EXE) \
+	EppTestCN$(EXE) \
 
 TESTS=\
 	EppTestCore	\
@@ -78,6 +81,7 @@ TESTS=\
 	EppTestIDN \
 	EppTestFee \
 	EppTestChangePoll \
+	EppTestCN \
 
 LIBNAME=libepp-c
 THISLIB=${EPP_LIB_DIR}/${LIBNAME}${PRODUCTVERSION}${SHLIBSUFFIX}
@@ -135,6 +139,9 @@ EppTestFee$(EXE): EppTestFee.$(O)
 	$(CC2) -o $(@) $(<) ${ALLLIBS}
 
 EppTestChangePoll$(EXE): EppTestChangePoll.$(O)
+	$(CC2) -o $(@) $(<) ${ALLLIBS}
+
+EppTestCN$(EXE): EppTestCN.$(O)
 	$(CC2) -o $(@) $(<) ${ALLLIBS}
 
 #

@@ -82,6 +82,7 @@ EppSessionTcp::EppSessionTcp()
 	this->sock = -1;
 	this->sslctx = null;
 	this->sslssl = null;
+	this->sotimeout = 0;
 
 	this->privateKeyFileName = null;
 	this->privateKeyFileType = SSL_FILETYPE_PEM;
@@ -99,6 +100,7 @@ EppSessionTcp::EppSessionTcp( bool useTLS )
 	this->sock = -1;
 	this->sslctx = null;
 	this->sslssl = null;
+	this->sotimeout = 0;
 
 	this->privateKeyFileName = null;
 	this->privateKeyFileType = SSL_FILETYPE_PEM;
@@ -246,17 +248,16 @@ void EppSessionTcp::initTLS()
 	}
 
 	SSL_set_fd(this->sslssl, this->sock);
+	time_t tStarted = time(0);
 	while ( true )
 	{
 		int n = SSL_connect(this->sslssl);
 		if ( n > 0 )
 			break; // success
 
-		int err = SSL_get_error(this->sslssl, n);
-		if ( err == SSL_ERROR_WANT_READ || err == SSL_ERROR_WANT_WRITE )
+		if( EppMessageUtil::shouldSSLRetry(SSL_get_error(this->sslssl, n), tStarted, this->getSocketTimeout()) )
 		{
-			EppUtil::msSleep(50);
-			continue; // retry
+			continue;
 		}
 
 		// error
@@ -517,7 +518,7 @@ EppGreeting * EppSessionTcp::connect( const char * host, const int port )
 		{
 			return null;
 		}
-		str = EppMessageUtil::getEppPayload(this->sslssl, &len);
+		str = EppMessageUtil::getEppPayload(this->sslssl, &len, this->getSocketTimeout());
 		if( len == 0 )
 		{
 			this->setException(str);
@@ -565,7 +566,7 @@ EppGreeting * EppSessionTcp::hello()
 		{
 			return null;
 		}
-		str = EppMessageUtil::send(this->sslssl, hello.toString(), &len);
+		str = EppMessageUtil::send(this->sslssl, hello.toString(), &len, this->sotimeout);
 	}
 	else
 	{

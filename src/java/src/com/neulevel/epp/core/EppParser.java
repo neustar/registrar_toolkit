@@ -115,6 +115,8 @@ public class EppParser implements ErrorHandler
 				sl.append(EppUtil.NAMESPACEEPP09).append("allocationToken-1.0 ").append(xsdFilesLocation).append("/allocationToken-1.0.xsd ");
 				sl.append(EppUtil.NAMESPACEEPP09).append("fee-0.6 ").append(xsdFilesLocation).append("/fee-0.6.xsd ");
 				sl.append(EppUtil.NAMESPACEEPP09).append("changePoll-1.0 ").append(xsdFilesLocation).append("/changePoll-1.0.xsd ");
+				sl.append(EppUtil.NAMESPACEEPP09).append("cnnic-contact-1.0 ").append(xsdFilesLocation).append("/cnnic-contact-1.0.xsd ");
+				sl.append(EppUtil.NAMESPACEEPP09).append("cdn-1.0 ").append(xsdFilesLocation).append("/cdn-1.0.xsd ");
 				parser.setProperty("http://apache.org/xml/properties/schema/external-schemaLocation", sl.toString());
 			}
 

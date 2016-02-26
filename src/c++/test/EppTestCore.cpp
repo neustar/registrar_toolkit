@@ -80,11 +80,6 @@ int main( int argc, char ** argv )
 
 int runEppTestCore(EppParser & parser)
 {
-	DOMNode* nn;
-	if( nn == null )
-	{
-		cout << "nn is null\n";
-	}
 	DOMString ss;
 	if( ss.isNull() )
 	{

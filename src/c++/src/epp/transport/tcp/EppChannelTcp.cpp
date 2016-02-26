@@ -26,6 +26,7 @@
 #include "EppHello.hpp"
 #include "EppCommandLogout.hpp"
 #include "EppMessageUtil.hpp"
+#include "EppSessionTcp.hpp"
 //#include "xercesc/dom/DomMemDebug.hpp"
 
 EppResponse * EppChannelTcp::send( EppCommand& command )
@@ -77,7 +78,13 @@ EppResponse * EppChannelTcp::send( EppCommand& command )
 	int    len = 0;
 	if( usetls )
 	{
-		msg = EppMessageUtil::send(ssl, cmd, &len);
+		int timeout = 0;
+		EppSessionTcp *tSession = dynamic_cast<EppSessionTcp*> (this->getSession());
+		if( tSession != NULL )
+		{
+			timeout = tSession->getSocketTimeout();
+		}
+		msg = EppMessageUtil::send(ssl, cmd, &len, timeout);
 	}
 	else
 	{
@@ -157,7 +164,13 @@ EppGreeting * EppChannelTcp::hello()
 	int    len = 0;
 	if( usetls )
 	{
-		str = EppMessageUtil::send(ssl, hello.toString(), &len);
+		int timeout = 0;
+		EppSessionTcp *tSession = dynamic_cast<EppSessionTcp*> (this->getSession());
+		if( tSession != NULL )
+		{
+			timeout = tSession->getSocketTimeout();
+		}		
+		str = EppMessageUtil::send(ssl, hello.toString(), &len, timeout);
 	}
 	else
 	{

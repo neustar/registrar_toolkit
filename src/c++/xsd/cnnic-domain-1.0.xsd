@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<schema targetNamespace="urn:ietf:params:xml:ns:cnnic-domain-1.0"
+        xmlns:cnnic-domain="urn:ietf:params:xml:ns:cnnic-domain-1.0"
+        xmlns:epp="urn:ietf:params:xml:ns:epp-1.0"
+        xmlns:eppcom="urn:ietf:params:xml:ns:eppcom-1.0"
+        xmlns="http://www.w3.org/2001/XMLSchema"
+        elementFormDefault="qualified">
+
+<!--
+Import common element types.
+-->
+
+  <import namespace="urn:ietf:params:xml:ns:eppcom-1.0"
+          schemaLocation="eppcom-1.0.xsd"/>
+  <import namespace="urn:ietf:params:xml:ns:epp-1.0"
+          schemaLocation="epp-1.0.xsd"/>
+
+  <annotation>
+    <documentation>
+      Extensible Provisioning Protocol v1.0
+      CNNIC Domain Extension Schema v1.0
+    </documentation>
+  </annotation>
+
+
+<!--
+Types used within an EPP greeting.
+-->
+  <element name="svc" />
+  
+  
+<!--
+Child elements found in EPP commands.
+-->
+
+  <element name="create" type="cnnic-domain:createType"/>
+  <element name="update" type="cnnic-domain:updateType"/>
+
+<!--
+Child elements of the <cnnic-domain:create> command
+All elements must be present at time of creation
+-->
+
+  <complexType name="createType">
+    <sequence>
+      <element name="type" type="cnnic-domain:domainType"  minOccurs="0"/>
+      <!-- agent that sells the domain, e.g. registrar, reseller -->
+      <element name="purveyor" type="eppcom:clIDType"/>
+    </sequence>
+  </complexType>
+
+<!--
+domainType - domain registrant type
+        (Values listed for reference only. Can be removed.)
+        E: domestic enterprise registrant
+        I: domestic individual registrant
+-->
+
+  <simpleType name="domainType">
+   <restriction base="token">
+    <enumeration value="E"/>
+    <enumeration value="I"/>
+   </restriction>
+  </simpleType>
+
+<!--
+Child elements of <cnnic-domain:update> command
+Cannot be added or removed, only change is allowed
+At least one element should be present
+-->
+
+  <complexType name="updateType">
+    <sequence>
+      <element name="chg" type="cnnic-domain:addRemChgType" minOccurs="0" />
+    </sequence>
+  </complexType>
+
+  <complexType name="addRemChgType">
+    <sequence>
+      <element name="type" type="cnnic-domain:domainType"
+       minOccurs="0"/>
+      <!-- agent that sells the domain, e.g. registrar, reseller -->
+      <element name="purveyor" type="eppcom:clIDType"
+       minOccurs="0"/>
+    </sequence>
+  </complexType>
+
+<!--
+Child response element
+-->
+
+  <element name="infData" type="cnnic-domain:infDataType"/>
+
+<!--
+<cnnic-domain:infData> response elements
+-->
+
+  <complexType name="infDataType">
+    <sequence>
+      <element name="type" type="cnnic-domain:domainType" minOccurs="0"/>
+      <!-- agent that sells the domain, e.g. registrar, reseller -->
+      <element name="purveyor" type="eppcom:clIDType"/>
+    </sequence>
+  </complexType>
+
+<!--
+End of schema.
+-->
+
+</schema>

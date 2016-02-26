@@ -663,7 +663,7 @@ void EppTestServerTcpThread::run()
 
 		if( this->ssl != null )
 		{
-			msg = EppMessageUtil::getEppPayload(this->ssl, &len);
+			msg = EppMessageUtil::getEppPayload(this->ssl, &len, 60);
 		}
 		else if( this->sock >= 0 )
 		{
@@ -746,7 +746,7 @@ int EppTestServerTcpThread::write( EppEntity * s )
 		char * err = null;
 		if( this->ssl != null )
 		{
-			err = EppMessageUtil::putEppPayload(this->ssl, t);
+			err = EppMessageUtil::putEppPayload(this->ssl, t, 60);
 			if( err == null )
 			{
 				n = t.length();
@@ -832,6 +832,8 @@ EppTestServerTcp::EppTestServerTcp()
 	this->remoteKeyFileName = null;
 	this->publicKeyFileName = null;
 	this->privateKeyFileName = null;
+	this->privateKeyFileType = SSL_FILETYPE_PEM;
+	this->publicKeyFileType  = SSL_FILETYPE_PEM;
 	this->sock = -1;
 	this->sslctx = null;
 	this->num_of_threads = 0;
@@ -849,6 +851,8 @@ EppTestServerTcp::EppTestServerTcp( int port )
 	this->remoteKeyFileName = null;
 	this->publicKeyFileName = null;
 	this->privateKeyFileName = null;
+	this->privateKeyFileType = SSL_FILETYPE_PEM;
+	this->publicKeyFileType  = SSL_FILETYPE_PEM;
 	this->sock = -1;
 	this->sslctx = null;
 	this->num_of_threads = 0;

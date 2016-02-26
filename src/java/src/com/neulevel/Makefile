@@ -29,6 +29,6 @@
 # Makefile for directory src/com/neulevel
 
 TARGETS =
-DIRS = epp biz us
+DIRS = epp biz us cn
 TOP = ../../..
 include $(TOP)/src/Makefile.incl

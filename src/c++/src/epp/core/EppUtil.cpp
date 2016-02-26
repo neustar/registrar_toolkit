@@ -417,7 +417,7 @@ DOMText* EppUtil::createTextNode( DOMDocument& doc, const time_t cal, bool dateO
 
 #if	   EPP_SUPPORT_UNSIGNED_TIME_T		/* { */
 
-	long long t = (long long) ((unsigned int) cal);
+	long long t = cal;
 	(void) gmtime64_r(&t, &tmp);
 
 #else	/* EPP_SUPPORT_UNSIGNED_TIME_T	*/	/* } */
@@ -584,7 +584,7 @@ time_t EppUtil::getDate( const char * s, bool dateOnly )
 			else
 			{
 				// Parse the GMT offset if present.
-				struct tm junk; // Values inside are not used. Defined this instead of defining may ints.
+				struct tm junk; // Values inside are not used. Defined this instead of defining many ints.
 				char tStr[32];
 
 				(void) memset(tStr, '\0', sizeof(tStr));
@@ -628,8 +628,7 @@ time_t EppUtil::getDate( const char * s, bool dateOnly )
 
 #if	   EPP_SUPPORT_UNSIGNED_TIME_T		/* { */
 
-			long long t = mktime64(&tmp) - timezone + daylight * 3600;
-			cal = t & 0xFFFFFFFF;
+			cal = mktime64(&tmp) - timezone + daylight * 3600;
 
 #else	/* EPP_SUPPORT_UNSIGNED_TIME_T	*/	/* } */
 
@@ -679,10 +678,6 @@ short
 EppUtil::getDnsSecMajorMinor(const DOMNode &root,
 	unsigned short &_major, unsigned short &_minor)
 {
-	char major[4] = "\0";
-	char minor[4] = "\0";
-	int8_t iter = 0;
-
 	DOMString value = ((DOMElement*)&root)->getAttribute(XS("xmlns:secDNS"));
 	if( value.isNull() )
 	{

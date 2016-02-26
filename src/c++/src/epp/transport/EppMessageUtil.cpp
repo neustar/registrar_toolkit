@@ -62,7 +62,7 @@ char * EppMessageUtil::getEppPayload( int socket, int * length, bool * quit, int
 	char * buf = new char[BUFSIZ];
 
 	if( buf == null )
-		return null; // no mem
+		return buf; // no mem
 
 	bool endFound = false;
 	bool eppFound = false;
@@ -192,24 +192,24 @@ char * EppMessageUtil::getEppPayload( int socket, int * length, bool * quit, int
 	return buf;
 }
 
-char * EppMessageUtil::send( SSL * ssl, const DOMString& str, int * length )
+char * EppMessageUtil::send( SSL * ssl, const DOMString& str, int * length, int timeout )
 {
 	*length = 0;
-	char * p = EppMessageUtil::putEppPayload(ssl, str);
+	char * p = EppMessageUtil::putEppPayload(ssl, str, timeout);
 	if( p != null )
 	{
 		return p;
 	}
-	return EppMessageUtil::getEppPayload(ssl, length);
+	return EppMessageUtil::getEppPayload(ssl, length, timeout);
 }
 
-char * EppMessageUtil::getEppPayload( SSL * ssl, int * length )
+char * EppMessageUtil::getEppPayload( SSL * ssl, int * length, int timeout )
 {
 	bool quit = false;
-	return EppMessageUtil::getEppPayload(ssl, length, &quit, 0);
+	return EppMessageUtil::getEppPayload(ssl, length, &quit, 0, timeout);
 }
 
-char * EppMessageUtil::getEppPayload( SSL * ssl, int * length, bool * quit, int maxsize )
+char * EppMessageUtil::getEppPayload( SSL * ssl, int * length, bool * quit, int maxsize, int timeout )
 {
 	*length = 0;
 	int    i = 0;
@@ -217,7 +217,7 @@ char * EppMessageUtil::getEppPayload( SSL * ssl, int * length, bool * quit, int 
 	char * buf = new char[BUFSIZ];
 
 	if( buf == null )
-		return null; // no mem
+		return buf; // no mem
 
 	bool endFound = false;
 	bool eppFound = false;
@@ -226,7 +226,7 @@ char * EppMessageUtil::getEppPayload( SSL * ssl, int * length, bool * quit, int 
 
 	if( fetchMessageSize == true )
 	{
-		eppSize = EppMessageUtil::getEppPayloadSize(ssl, quit, buf, BUFSIZ);
+		eppSize = EppMessageUtil::getEppPayloadSize(ssl, quit, buf, BUFSIZ, timeout);
 		if( eppSize <= 0 )
 		{
 			return buf;
@@ -237,7 +237,7 @@ char * EppMessageUtil::getEppPayload( SSL * ssl, int * length, bool * quit, int 
 	{
 		char c;
 		int n;
-
+		time_t tStarted= time(0);
 		while ( true )
 		{
 			if ( *quit == true )
@@ -255,14 +255,12 @@ char * EppMessageUtil::getEppPayload( SSL * ssl, int * length, bool * quit, int 
 
 			if ( n < 0 )
 			{
-				int err = SSL_get_error(ssl, n);
-				if ( err == SSL_ERROR_WANT_READ || err == SSL_ERROR_WANT_WRITE )
+				if ( EppMessageUtil::shouldSSLRetry( SSL_get_error(ssl, n), tStarted, timeout ) )
 				{
-					EppUtil::msSleep(100);
 					continue;
 				}
 
-				snprintf(buf, BUFSIZ, "Error in EppMessageUtil::getEppPayload() SSL_read error [rv=%d, ssl_err=%d, errno=%d]", n, err, errno);
+				snprintf(buf, BUFSIZ, "Error in EppMessageUtil::getEppPayload() SSL_read error [rv=%d, ssl_err=%d, errno=%d]", n, SSL_get_error(ssl, n), errno);
 			}
 			else
 			{ // n == 0
@@ -449,7 +447,7 @@ char * EppMessageUtil::putEppPayload( int socket, const DOMString& str )
 	return null;
 }
 
-char * EppMessageUtil::putEppPayload( SSL * ssl, const DOMString& str )
+char * EppMessageUtil::putEppPayload( SSL * ssl, const DOMString& str, int timeout)
 {
 	char	* p = str.transcode();
 	int	  n;
@@ -466,17 +464,16 @@ char * EppMessageUtil::putEppPayload( SSL * ssl, const DOMString& str )
 			(void) ::memcpy(tmp_buf    , (char *) &len, 4);
 			(void) ::memcpy(tmp_buf + 4, (char *) p   , l);
 			delete [] p;
+			time_t tStarted = time(0);
 			while ( true )
 			{
 				ERR_clear_error();
 				n = SSL_write(ssl, tmp_buf, l + 4);
 				if ( n < 0 )
 				{
-					int err = SSL_get_error(ssl, n);
-					if ( err == SSL_ERROR_WANT_READ || err == SSL_ERROR_WANT_WRITE )
+					if ( EppMessageUtil::shouldSSLRetry( SSL_get_error(ssl, n), tStarted, timeout ) )
 					{
-						EppUtil::msSleep(100);
-						continue; // retry
+						continue;
 					}
 				}
 				break; // either success, or connection closed, or error
@@ -488,17 +485,16 @@ char * EppMessageUtil::putEppPayload( SSL * ssl, const DOMString& str )
 			return null;
 		}
 
+		time_t tStarted = time(0);
 		while ( true )
 		{
 			ERR_clear_error();
 			n = SSL_write(ssl, (char *) &len, sizeof(uint32_t));
 			if ( n < 0 )
 			{
-				int err = SSL_get_error(ssl, n);
-				if ( err == SSL_ERROR_WANT_READ || err == SSL_ERROR_WANT_WRITE )
+				if ( EppMessageUtil::shouldSSLRetry( SSL_get_error(ssl, n), tStarted, timeout ) )
 				{
-					EppUtil::msSleep(100);
-					continue; // retry
+					continue;
 				}
 			}
 			break; // either success, or connection closed, or error
@@ -509,17 +505,16 @@ char * EppMessageUtil::putEppPayload( SSL * ssl, const DOMString& str )
 		}
 	}
 
+	time_t tStarted = time(0);
 	while ( true )
 	{
 		ERR_clear_error();
 		n = SSL_write(ssl, p, l);
 		if ( n < 0 )
 		{
-			int err = SSL_get_error(ssl, n);
-			if ( err == SSL_ERROR_WANT_READ || err == SSL_ERROR_WANT_WRITE )
+			if ( EppMessageUtil::shouldSSLRetry( SSL_get_error(ssl, n), tStarted, timeout ) )
 			{
-				EppUtil::msSleep(100);
-				continue; // retry
+				continue;
 			}
 		}
 		break; // either success, or connection closed, or error
@@ -580,7 +575,7 @@ int EppMessageUtil::getEppPayloadSize( int socket, bool * quit, char *errbuf, si
 	return size;
 }
 
-int EppMessageUtil::getEppPayloadSize( SSL * ssl, bool * quit, char *errbuf, size_t bufsiz )
+int EppMessageUtil::getEppPayloadSize( SSL * ssl, bool * quit, char *errbuf, size_t bufsiz, int timeout )
 {
 	int size = 0;
 	for( int i = 0; i < 4; i++ )
@@ -588,6 +583,7 @@ int EppMessageUtil::getEppPayloadSize( SSL * ssl, bool * quit, char *errbuf, siz
 		unsigned char c;
 		int n;
 
+		int tStarted = time(0);
 		while( true )
 		{
 			if ( *quit == true )
@@ -604,14 +600,12 @@ int EppMessageUtil::getEppPayloadSize( SSL * ssl, bool * quit, char *errbuf, siz
 
 			if ( n < 0 )
 			{
-				int err = SSL_get_error(ssl, n);
-				if ( err == SSL_ERROR_WANT_READ || err == SSL_ERROR_WANT_WRITE )
+				if ( EppMessageUtil::shouldSSLRetry( SSL_get_error(ssl, n), tStarted, timeout ) )
 				{
-					EppUtil::msSleep(100);
 					continue;
 				}
 
-				snprintf(errbuf, bufsiz, "Error in EppMessageUtil::getEppPayloadSize() SSL_read error [rv=%d, ssl_err=%d, errno=%d]", n, err, errno);
+				snprintf(errbuf, bufsiz, "Error in EppMessageUtil::getEppPayloadSize() SSL_read error timeout[%d] [rv=%d, ssl_err=%d, errno=%d]", timeout, n, SSL_get_error(ssl, n), errno);
 			}
 			else
 			{ // n == 0
@@ -631,4 +625,17 @@ int EppMessageUtil::getEppPayloadSize( SSL * ssl, bool * quit, char *errbuf, siz
 
 	size -= 4;
 	return size;
+}
+
+bool EppMessageUtil::shouldSSLRetry( int sslErrNum, time_t tStarted, int secTimeout )
+{
+	if ( sslErrNum == SSL_ERROR_WANT_READ || sslErrNum == SSL_ERROR_WANT_WRITE )
+	{
+		if ( ( (time(0) - tStarted) < secTimeout ) || secTimeout == 0 )
+		{
+			EppUtil::msSleep(50);
+			return true;
+		}
+	}
+	return false;
 }

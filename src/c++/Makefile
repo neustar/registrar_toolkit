@@ -31,7 +31,7 @@
 TOP=.
 DIRS=
 include $(TOP)/src/Makefile.plat
-TARGETS=compile_src lib docs test package
+TARGETS=compile_src lib test docs package
 include $(TOP)/src/Makefile.incl
 
 package:: package_bin package_src

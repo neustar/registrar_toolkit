@@ -246,7 +246,6 @@ bool EppCommandUpdateSecDns::toXML( DOMDocument& doc, DOMElement& root, const DO
 		{
 			char buf[32];
 			int val = keyTagList->elementAt(i);
-			val = val ;
 			(void) ::sprintf(buf, "%d", val);
 			elm = doc.createElement(XS("keyTag"));
 			elm->appendChild(doc.createTextNode(XS(buf)));

@@ -74,7 +74,7 @@
 
          <!-- Build the epp library files -->
  	         <jar jarfile="${build.dist.lib}/epp-${epp.version.major}.${epp.version.minor}.${epp.version.build}.jar" basedir="${build.dist.classes}">
-                <include name="com/neulevel/epp/**/*.class"/>
+                <include name="com/neulevel/**/*.class"/>
                 <manifest>
                    <attribute name="Product-Version"
                          value="${epp.version.major}.${epp.version.minor}.${epp.version.build}"/>

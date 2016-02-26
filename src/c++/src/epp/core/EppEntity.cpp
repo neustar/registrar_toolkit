@@ -205,6 +205,17 @@ const int EppEntity::TYPE_EppResponseDeleteFee			  = 931;
 
 const int EppEntity::TYPE_EppChangePollExt			  = 932;
 
+const int EppEntity::TYPE_CNDomainCreateExt			  = 933;
+const int EppEntity::TYPE_CNDomainInfoExt			  = 934;
+const int EppEntity::TYPE_CNDomainUpdateExt			  = 935;
+const int EppEntity::TYPE_CNContactCreateExt			  = 936;
+const int EppEntity::TYPE_CNContactInfoExt			  = 937;
+const int EppEntity::TYPE_CNContactUpdateExt			  = 938;
+const int EppEntity::TYPE_CNHostCreateExt			  = 939;
+const int EppEntity::TYPE_CNHostInfoExt				  = 940;
+const int EppEntity::TYPE_CNHostUpdateExt			  = 941;
+
+const int EppEntity::TYPE_CNCDNExt				  = 942;
 
 const int EppEntity::TYPE_EppIDN   = 1000;
 

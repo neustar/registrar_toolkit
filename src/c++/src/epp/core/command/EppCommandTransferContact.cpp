@@ -52,7 +52,7 @@ DOMElement* EppCommandTransferContact::toXML( DOMDocument& doc, const DOMString&
 	ValueVectorOf<DOMAttr*> attrList(1);
 	attrList.addElement(attr);
 
-	return toXMLCommon(doc, tag, *body, &attrList);
+	return toXMLCommon(doc, tag, body, &attrList);
 }
 
 EppCommandTransferContact * EppCommandTransferContact::fromXML( const DOMNode& root )

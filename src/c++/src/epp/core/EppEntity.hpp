@@ -370,6 +370,16 @@ public:
 	static const int TYPE_EppResponseDeleteFee;
         static const int TYPE_EppChangePollExt;
 
+	static const int TYPE_CNDomainCreateExt;
+	static const int TYPE_CNDomainInfoExt;
+	static const int TYPE_CNDomainUpdateExt;
+	static const int TYPE_CNContactCreateExt;
+	static const int TYPE_CNContactInfoExt;
+	static const int TYPE_CNContactUpdateExt;
+	static const int TYPE_CNHostCreateExt;
+	static const int TYPE_CNHostInfoExt;
+	static const int TYPE_CNHostUpdateExt;
+	static const int TYPE_CNCDNExt;
 
 	//@}
 

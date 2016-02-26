@@ -25,6 +25,10 @@ package com.neulevel.epp.ext;
 
 import org.w3c.dom.Node;
 
+import com.neulevel.cn.CNCDNExt;
+import com.neulevel.cn.CNContactCreateExt;
+import com.neulevel.cn.CNContactInfoExt;
+import com.neulevel.cn.CNContactUpdateExt;
 import com.neulevel.epp.core.EppEntity;
 import com.neulevel.epp.core.EppUtil;
 import com.neulevel.epp.ext.command.EppCommandCheckLaunchRegistration;
@@ -197,6 +201,22 @@ abstract public class EppExtension extends EppEntity
 		} else if (prefix.equals("changePoll") && name.equals("changeData") ) 
 		{
 			entity = (EppExtension) EppChangePollExt.fromXML(root);
+			
+		} else if (prefix.equals("cnnic-contact") && name.equals("create") ) 
+		{
+			entity = (EppExtension) CNContactCreateExt.fromXML(root);
+			
+		} else if (prefix.equals("cnnic-contact") && name.equals("infData") ) 
+		{
+			entity = (EppExtension) CNContactInfoExt.fromXML(root);
+			
+		} else if (prefix.equals("cnnic-contact") && name.equals("update") ) 
+		{
+			entity = (EppExtension) CNContactUpdateExt.fromXML(root);
+			
+		} else if (prefix.equals("cdn") && name.equals("infData") ) 
+		{
+			entity = (EppExtension) CNCDNExt.fromXML(root);
 			
 		}
 		return (EppEntity) entity;

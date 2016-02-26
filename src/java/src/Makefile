@@ -161,6 +161,12 @@ source: ../bin/${JARFILE} ../bin/${JARFILE}.md5
 	${CP}      ../src/com/neulevel/us/*.class \
 	         ../class/com/neulevel/us
 #
+# src/com/neulevel/cn
+#
+	${MKDIR} ../class/com/neulevel/cn
+	${CP}      ../src/com/neulevel/cn/*.class \
+		../class/com/neulevel/cn
+#
 # Make the jar file
 #
 	echo ${PRODUCTVERSION} > ../class/Epp_Ver_${PRODUCTIONVESION}.info
@@ -206,19 +212,19 @@ package_src:
 	${CP}           ../src/com/neulevel/epp/ext/response/*.{java,html} \
 	         ../source/src/com/neulevel/epp/ext/response
 #
-# src/com/neulevel/epp/ext/command
+# src/com/neulevel/epp/ext/fee
 #
 	${MKDIR} ../source/src/com/neulevel/epp/ext/fee
 	${CP}           ../src/com/neulevel/epp/ext/fee/*.{java,html} \
                  ../source/src/com/neulevel/epp/ext/fee
 #
-# src/com/neulevel/epp/ext/command
+# src/com/neulevel/epp/ext/fee/command
 #
 	${MKDIR} ../source/src/com/neulevel/epp/ext/fee/command
 	${CP}           ../src/com/neulevel/epp/ext/fee/command/*.{java,html} \
                  ../source/src/com/neulevel/epp/ext/fee/command
 #
-# src/com/neulevel/epp/ext/command
+# src/com/neulevel/epp/ext/fee/response
 #
 	${MKDIR} ../source/src/com/neulevel/epp/ext/fee/response
 	${CP}           ../src/com/neulevel/epp/ext/fee/response/*.{java,html} \
@@ -272,6 +278,12 @@ package_src:
 	${CP}           ../src/com/neulevel/us/*.{java,html} \
 	         ../source/src/com/neulevel/us
 #
+# src/com/neulevel/cn
+#
+	${MKDIR} ../source/src/com/neulevel/cn
+	${CP}           ../src/com/neulevel/cn/*.{java,html} \
+		../source/src/com/neulevel/cn
+#
 # Copy the Makefiles under src
 #
 # src/com/neulevel/epp/core
@@ -319,17 +331,17 @@ package_src:
 	${CP}     ../src/com/neulevel/epp/ext/response/Makefile \
 	   ../source/src/com/neulevel/epp/ext/response
 #
-# src/com/neulevel/epp/ext/command
+# src/com/neulevel/epp/ext/fee
 #
 	${CP}     ../src/com/neulevel/epp/ext/fee/Makefile \
 	../source/src/com/neulevel/epp/ext/fee/
 #
-# src/com/neulevel/epp/ext/command
+# src/com/neulevel/epp/ext/fee/command
 #
 	${CP}     ../src/com/neulevel/epp/ext/fee/command/Makefile \
 	../source/src/com/neulevel/epp/ext/fee/command
 #
-# src/com/neulevel/epp/ext/command
+# src/com/neulevel/epp/ext/fee/response
 #
 	${CP}     ../src/com/neulevel/epp/ext/fee/response/Makefile \
 	../source/src/com/neulevel/epp/ext/fee/response
@@ -363,6 +375,11 @@ package_src:
 #
 	${CP}     ../src/com/neulevel/us/Makefile \
 	   ../source/src/com/neulevel/us
+#
+# src/com/neulevel/cn
+#
+	${CP}     ../src/com/neulevel/cn/Makefile \
+	../source/src/com/neulevel/cn
 #
 # src/com/neulevel
 #

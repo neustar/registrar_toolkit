@@ -205,7 +205,7 @@ public:
 	static void msSleep(unsigned int milliseconds);
 
 	/**
-	 * Get SecDNS extenstion from STRING or DOMNode
+	 * Get SecDNS extension from STRING or DOMNode
 	 *
 	 **/
 	static short getDnsSecMajorMinor(const DOMNode &root, unsigned short &_major, unsigned short &_minor);
@@ -220,7 +220,7 @@ public:
 	static DOMString substring(char sep, const DOMString & src);
 
 	/**
-	 * Seaches the search string and return start and end tags which include < and >
+	 * Searches the search string and return start and end tags which include < and >
 	 * In some searches sometime it is required to pass a space at end in the search string
 	 * but it is not required to be included in endTag. If that the case pass spaceAtEnd
 	 * as true.

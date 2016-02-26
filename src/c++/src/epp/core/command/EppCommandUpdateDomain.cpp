@@ -123,7 +123,7 @@ void EppCommandUpdateDomain::nameServerToXML( DOMDocument& doc, DOMElement& body
 	if( (list != null) && (list->size() > 0) )
 	{
 		bool first = true;
-		DOMElement* elm;
+		DOMElement* elm = null;
 		for( unsigned int i = 0; i < list->size(); i++ )
 		{
 			EppHostAttribute * ns = list->elementAt(i);
@@ -131,9 +131,13 @@ void EppCommandUpdateDomain::nameServerToXML( DOMDocument& doc, DOMElement& body
 			{
 				if( first == true )
 				{
-					DOMElement* elm = doc.createElement(XS("ns"));
+					elm = doc.createElement(XS("ns"));
 					body.appendChild(elm);
 					first = false;
+				}
+				if( elm == null )
+				{
+					continue;
 				}
 				DOMElement* ens = ns->toXML(doc, "hostAttr");
 				elm->appendChild(ens);

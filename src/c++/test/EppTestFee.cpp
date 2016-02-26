@@ -112,7 +112,9 @@ void doValidate(XS orig, XS again, const char* methodName)
 	}
 	else
 	{
-		std::cout<<endl<<"*******ERROR****** Result of toXML and fromXML does NOT match"<<endl;
+		std::cout<<endl<<"****************ERROR************ "
+                                 "Result of toXML and fromXML does NOT match"
+                                 "Again=\n"<<again<<endl;
 	}
 	makeValidate(orig, *getValidator());
 	//makeValidate(again, getValidator());

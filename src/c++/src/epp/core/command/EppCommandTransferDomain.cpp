@@ -56,7 +56,7 @@ DOMElement* EppCommandTransferDomain::toXML( DOMDocument& doc, const DOMString& 
 	ValueVectorOf<DOMAttr*> attrList(1);
 	attrList.addElement(attr);
 
-	return toXMLCommon(doc, tag, *body, &attrList);
+	return toXMLCommon(doc, tag, body, &attrList);
 }
 
 EppCommandTransferDomain * EppCommandTransferDomain::fromXML( const DOMNode& root )

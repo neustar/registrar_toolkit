@@ -68,7 +68,7 @@ DOMElement* EppCommandTransferSvcsub::toXML( DOMDocument& doc, const DOMString& 
 	ValueVectorOf<DOMAttr*> attrList(1);
 	attrList.addElement(attr);
 
-	return toXMLCommon(doc, tag, *body, &attrList);
+	return toXMLCommon(doc, tag, body, &attrList);
 }
 
 EppCommandTransferSvcsub * EppCommandTransferSvcsub::fromXML( const DOMNode& root )

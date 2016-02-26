@@ -79,8 +79,10 @@ public class EppResponseCheckFeeType extends EppCommandCheckFeeType {
 		if (body != null) {
 			super.toXMLCommon(doc, tag, body);
 			
+			if (eppFeeFeeVector != null) {
 			for (EppFeeFee feeFee : eppFeeFeeVector) {
 				body.appendChild(feeFee.toXML(doc, "fee"));
+			}
 			}
 			
 			if (feeClass != null) {

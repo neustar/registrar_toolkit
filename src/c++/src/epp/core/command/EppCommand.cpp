@@ -134,23 +134,22 @@ void EppCommand::setCreds( EppCreds& creds )
 
 DOMElement* EppCommand::toXMLCommon( DOMDocument& doc, const DOMString command, DOMElement& element )
 {
-	return toXMLCommon(doc, command, element, (EppEntity *) null, command, (ValueVectorOf<DOMAttr*> *) null);
+	return toXMLCommon(doc, command, &element, (EppEntity *) null, command, (ValueVectorOf<DOMAttr*> *) null);
 }
 
-DOMElement* EppCommand::toXMLCommon( DOMDocument& doc, const DOMString command, DOMElement& element, ValueVectorOf<DOMAttr*> * attrList )
+DOMElement* EppCommand::toXMLCommon( DOMDocument& doc, const DOMString command, DOMElement* element, ValueVectorOf<DOMAttr*> * attrList )
 {
 	return toXMLCommon(doc, command, element, null, command, attrList);
 }
 
 DOMElement* EppCommand::toXMLCommon( DOMDocument& doc, const DOMString command, EppEntity * object )
 {
-	DOMElement* element = NULL;
-	return toXMLCommon(doc, command, *element, object, command, (ValueVectorOf<DOMAttr*> *) null);
+	return toXMLCommon(doc, command, (DOMElement*) null, object, command, (ValueVectorOf<DOMAttr*> *) null);
 }
 
-DOMElement* EppCommand::toXMLCommon( DOMDocument& doc, const DOMString command, DOMElement& element, EppEntity * object, const DOMString tag, ValueVectorOf<DOMAttr*> * attrList )
+DOMElement* EppCommand::toXMLCommon( DOMDocument& doc, const DOMString command, DOMElement* element, EppEntity * object, const DOMString tag, ValueVectorOf<DOMAttr*> * attrList )
 {
-	DOMElement* elm;
+	DOMElement* elm = null;
 	DOMElement* epp = EppUtil::createElementNS(doc, "epp", NULLXS);
 	DOMElement* body = doc.createElement(XS("command"));
 	epp->appendChild(body);
@@ -162,12 +161,14 @@ DOMElement* EppCommand::toXMLCommon( DOMDocument& doc, const DOMString command, 
 
 	if( this->getEntityType() == EppEntity::TYPE_EppCommandLogin )
 	{
-		elm = &element;
+		elm = element;
 	}
 	else
 	{
 		elm = doc.createElement(command);
 	}
+	if( elm != null )
+	{
 	if( attrList != null )
 	{
 		for( unsigned int i = 0; i < attrList->size(); i++ )
@@ -180,14 +181,15 @@ DOMElement* EppCommand::toXMLCommon( DOMDocument& doc, const DOMString command, 
 	{
 		elm->appendChild(object->toXML(doc, tag));
 	}
-	else if( &element != null )
+		else if( element != null )
 	{
 		if( this->getEntityType() != EppEntity::TYPE_EppCommandLogin )
 		{
-			elm->appendChild(&element);
+				elm->appendChild(element);
 		}
 	}
 	body->appendChild(elm);
+	}
 
 	if( extension != null )
 	{

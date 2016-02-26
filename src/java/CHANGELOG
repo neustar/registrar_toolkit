@@ -26,6 +26,14 @@ NeuStar EPP Reference Implementation (Java)
 
 $Id: CHANGELOG,v 1.2 2006/03/01 05:04:02 wtan Exp $
 ================================================================================
+0.4.16 - 02/26/2016
+- Support of CNNIC (contact/host/doman/cdn) related extension
+- Bug fixes for Fee extension
+- Fixes for cppcheck errors/warnings
+- Added support of dates beyond Feb 7, 2106 (c++)
+- Added new tests for new extsnsions.
+
+================================================================================
 0.4.14 - 03/27/2015
 - Added support of allocation token epp extension
 - Added support of fee epp extesnion

@@ -52,6 +52,7 @@ public:
 	EppCommandLogin()
 	{
 		this->svcs = null;
+		this->options = null;
 	};
 
 	/**

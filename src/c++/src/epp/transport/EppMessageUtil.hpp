@@ -103,10 +103,14 @@ private:
 	 * @param quit the flag indicating if the thread should quit without
 	 *        completing the reading. The flag is set by another thread
 	 *	  to notify the thread to exit.
+	 * @param Max number of seconds after which operation of this method would timeout
+	 *        this is mainly for SSL_read and SSL_write operations. It is responsibility 
+         *        of caller to choose correct value of this param.
+	 *
 	 * @param errbuf buffer into which error message is returned (if method returns &lt; 0).
 	 * @param bufsiz size of buffer.
 	 */
-	static int getEppPayloadSize( SSL * ssl, bool * quit, char * errbuf, size_t bufsiz );
+	static int getEppPayloadSize( SSL * ssl, bool * quit, char * errbuf, size_t bufsiz, int timeout );
 
 public:
 
@@ -163,6 +167,10 @@ public:
 	 * @param str    the string to be sent over the socket
 	 * @param length the length of the string to be returned
 	 *
+	 * @param Max number of seconds after which operation of this method would timeout
+	 *        this is mainly for SSL_read and SSL_write operations. It is responsibility 
+         *        of caller to choose correct value of this param.
+	 *
 	 * @return a string containing the EPP message payload, or an
 	 *         error message if there is any error associated with
 	 *         the connection to the server or running out of memory
@@ -172,7 +180,7 @@ public:
 	 *       length parameter would be set to 0 and a string containing
 	 *       the error message should not be freed by the caller.
 	 */
-	static char * send( SSL * ssl, const DOMString& str, int * length );
+	static char * send( SSL * ssl, const DOMString& str, int * length , int timeout);
 
 	/**
 	 * Sends out an outgoing EPP message
@@ -193,9 +201,13 @@ public:
 	 *
 	 * @param str    the string to be sent out
 	 *
+	 * @param Max number of seconds after which operation of this method would timeout
+	 *        this is mainly for SSL_read and SSL_write operations. It is responsibility 
+         *        of caller to choose correct value of this param.
+	 *
 	 * @return null if there is no error, or an error message
 	 */
-	static char * putEppPayload( SSL * ssl, const DOMString& str );
+	static char * putEppPayload( SSL * ssl, const DOMString& str, int timeout );
 
 	/**
 	 * Gets the EPP message payload from an input stream
@@ -250,13 +262,16 @@ public:
 	 * @return a string containing the EPP message payload, or an
 	 *         error message if there is any error associated with
 	 *         the connection to the server or running out of memory
+	 * @param Max number of seconds after which operation of this method would timeout
+	 *        this is mainly for SSL_read and SSL_write operations. It is responsibility 
+         *        of caller to choose correct value of this param.
 	 *
 	 * @note the caller should free the memory containing the EPP message
 	 *       payload, if there is no error. If there is any error, the
 	 *       length parameter would be set to 0 and a string containing
 	 *       the error message should not be freed by the caller.
 	 */
-	static char * getEppPayload( SSL * ssl, int * length );
+	static char * getEppPayload( SSL * ssl, int * length, int timeout );
 
 	/**
 	 * Gets the EPP message payload from an input stream
@@ -268,6 +283,9 @@ public:
 	 *        completing the reading. The flag is set by another thread
 	 *	  to notify the thread to exit.
 	 * @param the maximum EPP message payload size, or 0 if there is no limit
+	 * @param Max number of seconds after which operation of this method would timeout
+	 *        this is mainly for SSL_read and SSL_write operations. It is responsibility 
+         *        of caller to choose correct value of this param.
 	 *
 	 * @return a string containing the EPP message payload, or an
 	 *         error message if there is any error associated with
@@ -281,7 +299,7 @@ public:
 	 * @note if the maximum size is reached, the length parameter is set to
 	 *       the negative of message length received
 	 */
-	static char * getEppPayload( SSL * ssl, int * length, bool * quit, int maxsize );
+	static char * getEppPayload( SSL * ssl, int * length, bool * quit, int maxsize, int timeout );
 
 	/**
 	 * Checks if there is timeout/error/input in a socket
@@ -291,6 +309,15 @@ public:
 	 * @return 1 for input, 0 for timeout, -1 for error
 	 */
 	static int checkSocket( int sock, int timeout );
+	/**
+	 * This method tried to see if SSL operation which return sslErrNum should be retried or not.
+	 * 
+         * @param sslErrNum: SSL error number return while performing SSL_read/write/accept/connect
+         * @param tStarted: time when the SSL operation was initially started.
+         * @param secTimeout: Timeout value in seconds. Operation would not timeout if this param is set to 0
+         * @return true if SSL operation should be re-tried false otherwise
+         */
+	static bool shouldSSLRetry( int sslErrNum, time_t tStarted, int secTimeout );
 };
 
 #endif     /* EPPMESSAGEUTIL_HPP */  /* } */

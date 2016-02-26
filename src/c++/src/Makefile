@@ -29,7 +29,7 @@
 # Makefile for directory . (src)
 
 TOP=..
-DIRS=util epp biz us 
+DIRS=util epp biz us cn
 include $(TOP)/src/Makefile.plat
 TARGETS=prepare include
 include $(TOP)/src/Makefile.incl

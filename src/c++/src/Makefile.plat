@@ -43,7 +43,7 @@ CXX=g++
 CXXFLAGS=-g
 PLATFORM_OPTIONS=-Wall -fpic -D$(PLATFORM) -D_REENTRANT -DEPP_EXPORT= -DEPPDNSSEC_COMPT
 MAKE_SHARED = $(CXX) -D$(PLATFORM) -shared -fpic
-ALLLIBS=${LIBS} -L/usr/lib -L/usr/ccs/lib -lc
+ALLLIBS=${LIBS} -L/usr/lib -L/usr/ccs/lib -lc -lpthread
 O=o
 EXE=
 SHLIBSUFFIX=.so

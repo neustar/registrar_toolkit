@@ -54,17 +54,24 @@
 #include "EppAllocationTokenData.hpp"
 #include "EppChangePollExt.hpp"
 
+#include "CNContactCreateExt.hpp"
+#include "CNContactInfoExt.hpp"
+#include "CNContactUpdateExt.hpp"
+#include "CNDomainCreateExt.hpp"
+#include "CNDomainInfoExt.hpp"
+#include "CNDomainUpdateExt.hpp"
+#include "CNHostCreateExt.hpp"
+#include "CNHostInfoExt.hpp"
+#include "CNHostUpdateExt.hpp"
+
+#include "CNCDNExt.hpp"
+
 EppExtension::~EppExtension()
 {
 }
 
 EppExtension * EppExtension::fromXML( const DOMNode &root )
 {
-	//if( root == null )
-	//{
-	//	return null;
-	//}
-
 	DOMString prefix = root.getPrefix();
 	DOMString name = root.getLocalName();
 	if( name.isNull() )
@@ -241,6 +248,58 @@ EppExtension * EppExtension::fromXML( const DOMNode &root )
         {
                 entity = EppChangePollExt::fromXML(root);
         }
+	//----------------CN Extsnsion-----------------------
+	else if(    (prefix.isNull() && name.equals("cnnic-domain:create")) ||
+		(prefix.isNotNull() && prefix.equals("cnnic-domain") && name.equals("create")) )
+	{
+		entity = CNDomainCreateExt::fromXML(root);
+	}
+	else if(    (prefix.isNull() && name.equals("cnnic-domain:infData")) ||
+		(prefix.isNotNull() && prefix.equals("cnnic-domain") && name.equals("infData")) )
+	{
+		entity = CNDomainInfoExt::fromXML(root);
+	}
+	else if(    (prefix.isNull() && name.equals("cnnic-domain:update")) ||
+		(prefix.isNotNull() && prefix.equals("cnnic-domain") && name.equals("update")) )
+	{
+		entity = CNDomainUpdateExt::fromXML(root);
+	}
 
+	else if(    (prefix.isNull() && name.equals("cnnic-contact:create")) ||
+		(prefix.isNotNull() && prefix.equals("cnnic-contact") && name.equals("create")) )
+	{
+		entity = CNContactCreateExt::fromXML(root);
+	}
+	else if(    (prefix.isNull() && name.equals("cnnic-contact:infData")) ||
+		(prefix.isNotNull() && prefix.equals("cnnic-contact") && name.equals("infData")) )
+	{
+		entity = CNContactInfoExt::fromXML(root);
+	}
+	else if(    (prefix.isNull() && name.equals("cnnic-contact:update")) ||
+		(prefix.isNotNull() && prefix.equals("cnnic-contact") && name.equals("update")) )
+	{
+		entity = CNContactUpdateExt::fromXML(root);
+	}
+
+	else if(    (prefix.isNull() && name.equals("cnnic-host:create")) ||
+		(prefix.isNotNull() && prefix.equals("cnnic-host") && name.equals("create")) )
+	{
+		entity = CNHostCreateExt::fromXML(root);
+	}
+	else if(    (prefix.isNull() && name.equals("cnnic-host:infData")) ||
+		(prefix.isNotNull() && prefix.equals("cnnic-host") && name.equals("infData")) )
+	{
+		entity = CNHostInfoExt::fromXML(root);
+	}
+	else if(    (prefix.isNull() && name.equals("cnnic-host:update")) ||
+		(prefix.isNotNull() && prefix.equals("cnnic-host") && name.equals("update")) )
+	{
+		entity = CNHostUpdateExt::fromXML(root);
+	}
+	else if(    (prefix.isNull() && name.equals("cdn:infData")) ||
+		(prefix.isNotNull() && prefix.equals("cdn") && name.equals("infData")) )
+	{
+		entity = CNCDNExt::fromXML(root);
+	}
 	return entity;
 }

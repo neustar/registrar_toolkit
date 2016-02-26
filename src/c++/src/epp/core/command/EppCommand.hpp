@@ -92,7 +92,7 @@ protected:
 	 *
 	 * @return an <code>DOMElement</code> object
 	 */
-	DOMElement* toXMLCommon( DOMDocument& doc, const DOMString command, DOMElement& element, ValueVectorOf<DOMAttr*> * attrList );
+	DOMElement* toXMLCommon( DOMDocument& doc, const DOMString command, DOMElement* element, ValueVectorOf<DOMAttr*> * attrList );
 
 	/**
 	 * Converts the shared <code>EppCommand</code> components into an XML
@@ -130,7 +130,7 @@ protected:
 	 *       i.e. if object is not null, element will not be used, or if
 	 *       object is null, the element should be used
 	 */
-	DOMElement* toXMLCommon( DOMDocument& doc, const DOMString command, DOMElement& element, EppEntity * object, const DOMString tag, ValueVectorOf<DOMAttr*> * attrList );
+	DOMElement* toXMLCommon( DOMDocument& doc, const DOMString command, DOMElement* element, EppEntity * object, const DOMString tag, ValueVectorOf<DOMAttr*> * attrList );
 
 public:
 
